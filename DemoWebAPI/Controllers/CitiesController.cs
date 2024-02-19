@@ -12,21 +12,25 @@ namespace DemoWebAPI.Controllers
         
 
         [HttpGet]
-        public JsonResult GetCities()
+        public ActionResult<IEnumerable<CityDto>> GetCities()
         {
-            return new JsonResult(CitiesData.current.Cities);
+            return Ok(CitiesData.current.Cities);
         }
 
         [HttpGet("{id}")]
-        public JsonResult GetCityById(int id) {
+        public ActionResult<CityDto> GetCityById(int id) {
             var city = CitiesData.current.Cities.FirstOrDefault(c => c.Id == id);
-            return new JsonResult(city);
+            if(city == null)
+            {
+                return NotFound();
+            }
+            return Ok(city);
         }
 
         [HttpPost]
-        public JsonResult PostCity(CityDto city) {
+        public ActionResult<CityDto> PostCity(CityDto city) {
             CitiesData.current.Cities.Add(city);
-            return new JsonResult(city); 
+            return Ok(city); 
         }
 
     }
